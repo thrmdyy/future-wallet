@@ -1,0 +1,1 @@
+export { tonClient } from './TonClient';

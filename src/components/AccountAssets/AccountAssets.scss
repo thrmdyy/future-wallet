@@ -1,0 +1,84 @@
+.accountAssets {
+    display: flex;
+    flex-direction: column;
+    
+    &Item {
+        &:not(:last-child) {
+            margin-bottom: 10px;
+        }
+    }
+}
+
+.accountAssetsItem {
+    position: relative;
+    width: 100%;
+    padding: 10px 0px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    cursor: pointer;
+
+    &:hover {
+        & .accountAssetsItem-bg {
+            display: block;
+        }
+    }
+
+    &-bg {
+        cursor: pointer;
+        display: none;
+        position: absolute;
+        width: 100vw;
+        height: 100%;
+
+        left: -25px;
+
+        background: rgba(255, 255, 255, 0.8);
+
+        z-index: -1;
+    }
+
+    &-asset {
+        display: flex;
+        align-items: center;
+    }
+
+    &-icon {
+        display: flex;
+        margin-right: 15px;
+
+        & img {
+            width: 50px;
+            height: 50px;
+        }
+    }
+
+    &-name {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 27px;
+
+        color: #26273C;
+    }
+
+    &-symbol {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 21px;
+
+        color: #9395A4;
+    }
+
+    &-balance {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 27px;
+
+        color: #26273C;
+    }
+}

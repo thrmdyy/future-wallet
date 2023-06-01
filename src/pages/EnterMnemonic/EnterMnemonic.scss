@@ -1,0 +1,27 @@
+.enterMnemonic {
+    &-form {
+        margin-bottom: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        flex-wrap: wrap;
+
+        & .input {
+            width: 49%;
+
+            &:not(:last-child) {
+                margin-bottom: 10px;
+            }
+        }
+    }
+
+    &-action {
+        display: flex;
+        flex-direction: column;
+
+        & .button:not(:last-child) {
+            margin-bottom: 15px;
+        }
+    }   
+}

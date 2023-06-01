@@ -1,0 +1,14 @@
+.mnemonic {
+    &-action {
+        display: flex;
+        flex-direction: column;
+
+        & .button:not(:last-child) {
+            margin-bottom: 15px;
+        }
+    } 
+    
+    & .seed {
+        margin-bottom: 40px;
+    }
+}

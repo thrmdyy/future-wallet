@@ -1,0 +1,19 @@
+.networkSelect {
+    &-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        padding: 6px 20px;
+        border-radius: 25px;
+
+        background-color: rgba(222, 245, 233, 1);
+
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+
+        color: #5FC88F;
+    }
+}

@@ -1,0 +1,59 @@
+.button {
+    font-family: 'Poppins';
+
+    outline: none;
+    border: none;
+
+    cursor: pointer;
+
+    font-style: normal;
+    font-weight: 600;
+
+    &_disabled {
+        cursor: default;
+        opacity: .5;
+    }
+
+    &_size {
+        &_m {
+            padding: 16px;
+
+            font-size: 15px;
+            line-height: 22px;
+
+            border-radius: 40px;
+        }
+    }
+
+    &_view {
+        &_icon {
+            width: 48px;
+            height: 48px;
+            
+            padding: 0px;
+
+            border-radius: 50%;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0px 20px 60px rgba(55, 62, 125, 0.05);
+        }
+
+        &_light {
+            color: #191C32;
+
+            background: #FFFFFF;
+            box-shadow: 0px 20px 30px rgba(25, 28, 50, 0.1);
+        }
+
+        &_dark {
+            color: #FFFFFF;
+
+            background: #191C32;
+            box-shadow: 0px 20px 30px rgba(25, 28, 50, 0.1);
+        }
+    }
+}

@@ -1,0 +1,39 @@
+.seed {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0px 40px;
+}
+
+.seedItem {
+    display: flex;
+    align-items: center;
+
+    &-number {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        width: 30px;
+        height: 30px;
+
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+
+        color: rgba(38, 39, 60, 0.8);
+    }
+
+    &-word {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 27px;
+
+        color: #191C32;
+    }
+}

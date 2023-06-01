@@ -1,0 +1,1 @@
+export { CheckMnemonic } from './CheckMnemonic';

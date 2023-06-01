@@ -1,0 +1,123 @@
+.inputToken {
+    position: relative;
+
+    &-base {
+        background: #FFFFFF;
+        border-radius: 25px;
+        padding: 10px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+    }
+
+    &-dropdownIndicator {
+        &_show {
+            transform: rotate(180deg);
+        }
+    }
+
+    &-token {
+        cursor: pointer;
+
+        display: flex;
+        align-items: center;
+
+        &-img {
+            display: flex;
+            margin-right: 15px;
+
+            & img {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        &-symbol {
+            font-style: normal;
+            font-weight: 500;
+            font-size: 18px;
+            line-height: 27px;
+
+            color: #26273C;
+        }
+
+        &-name {
+            font-style: normal;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 21px;
+
+            color: #9395A4;
+        }
+    }
+
+    &-input {
+        font-family: 'Poppins';
+        max-width: 100px;
+        padding-right: 10px;
+        outline: none;
+        border: none;
+
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 27px;
+        text-align: right;
+
+        color: #26273C;
+
+        &::placeholder {
+            font-weight: 400;
+            color: #9395A4;
+        }
+    }
+
+    &-dropdown {
+        display: none;
+
+        position: absolute;
+        top: calc(100% + 10px);
+        width: 100%;
+
+        max-height: 300px;
+        overflow: auto;
+        padding: 10px 0px;
+        background-color: #fff;
+        border-radius: 25px;
+
+        &_show {
+            display: block;
+        }
+
+        &Item {
+            cursor: pointer;
+            padding: 10px 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            &:hover {
+                background-color: #F3F5F6;
+            }
+
+            &-token {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            &-image {
+                display: flex;
+                margin-right: 10px;
+
+                & img {
+                    width: 30px;
+                    height: 30px;
+                }
+            }
+        }
+    }
+}

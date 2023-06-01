@@ -1,0 +1,32 @@
+.baseLayout {
+    height: 100vh;
+    max-height: 800px;
+
+    padding: 25px;
+
+    overflow: auto;
+    overflow-x: hidden;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &-header {
+        width: 100%;
+        
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        margin-bottom: 30px;
+
+    }
+
+    &-empty {
+        width: 48px;
+    }
+
+    &-content {
+        width: 100%;
+    }
+}

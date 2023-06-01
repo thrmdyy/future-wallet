@@ -1,0 +1,41 @@
+.accountActions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &Item {
+        cursor: pointer;
+        
+        background-color: #fff;
+
+        width: 100px;
+        height: 115px;
+
+        border-radius: 25px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 18px;
+
+        color: #191C32;
+
+        & svg, img {
+            margin-bottom: 13px;
+        }
+
+        &:hover {
+            background-color: rgba(255, 255, 255, .7);
+        }
+
+        &_disabled {
+            cursor: default;
+            opacity: .5;
+        }
+    }
+}

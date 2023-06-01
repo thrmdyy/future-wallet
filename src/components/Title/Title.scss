@@ -1,0 +1,22 @@
+.title {
+    font-style: normal;
+    font-weight: 600;
+
+    color: #191C32;
+
+    &_size {
+        &_l {
+            font-size: 32px;
+            line-height: 48px;
+        }
+
+        &_m {
+            font-size: 24px;
+            line-height: 32px;
+        }
+    }
+
+    &_center {
+        text-align: center;
+    }
+}

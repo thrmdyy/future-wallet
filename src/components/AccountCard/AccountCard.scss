@@ -1,0 +1,135 @@
+.accountCard {
+    position: relative;
+
+    padding: 20px;
+
+    background: #9F9DF3;
+    border-radius: 25px;
+
+    height: 160px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    &-domain {
+        cursor: pointer;
+        
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        padding: 5px 0px;
+
+        background-color: #fff;
+
+        border-radius: 25px;
+
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 18px;
+        /* identical to box height */
+
+        text-align: center;
+
+        color: #6069AC;
+    }
+
+    &-settings {
+        cursor: pointer;
+
+        display: flex;
+
+        position: absolute;
+
+        right: 15px;
+        top: 15px;
+
+        & svg {
+            width: 25px;
+            height: 25px;
+
+            &:hover path {
+                stroke: rgba(95, 200, 143, 1);
+            }
+        }
+    }
+
+    &-coin {
+        display: flex;
+
+        position: absolute;
+
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        right: 5px;
+        bottom: 5px;
+        
+    }
+    
+    &-name {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 22px;
+        line-height: 18px;
+
+        color: #FFFFFF;
+
+        margin-bottom: 15px;
+    }
+
+    &-address {
+        display: flex;
+        align-items: center;
+
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 14px;
+
+        color: #FFFFFF;
+
+        &-label {
+            margin-right: 15px;
+        }
+
+        &-value {
+            cursor: pointer;
+
+            display: flex;
+            align-items: center;
+
+            &:hover {
+                color: rgba(95, 200, 143, 1);
+
+                & svg {
+                    * {
+                        stroke: rgba(95, 200, 143, 1);
+                    }
+                }
+            }
+
+            & svg {
+                margin-left: 5px;
+            }
+        }
+    }
+
+    &-balance {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 18px;
+        /* identical to box height, or 90% */
+
+
+        color: #FFFFFF;
+    }
+}

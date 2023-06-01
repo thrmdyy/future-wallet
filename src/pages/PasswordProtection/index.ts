@@ -1,0 +1,1 @@
+export { PasswordProtection } from './PasswordProtection';

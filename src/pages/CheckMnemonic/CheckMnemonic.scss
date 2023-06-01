@@ -1,0 +1,20 @@
+.checkMnemonic {
+    &-form {
+        margin-bottom: 40px;
+
+        & .input {
+            &:not(:last-child) {
+                margin-bottom: 10px;
+            }
+        }
+    }
+
+    &-action {
+        display: flex;
+        flex-direction: column;
+
+        & .button:not(:last-child) {
+            margin-bottom: 15px;
+        }
+    }   
+}

@@ -1,0 +1,39 @@
+.transactionStatus {
+    height: 100vh;
+    max-height: 800px;
+    padding: 25px;
+    overflow: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &-top {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    &-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        
+        &_success {
+            height: 100%;
+            justify-content: space-between;
+        }
+
+        margin-top: 50px;
+    }
+
+    & svg {
+        margin-top: 50px;
+        width: 150px;
+        height: 150px;
+    }
+
+    & .button {
+        width: 100%;
+    }
+}

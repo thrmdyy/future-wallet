@@ -1,0 +1,34 @@
+.authLayout {
+    height: 100vh;
+    max-height: 800px;
+    padding: 25px;
+
+    overflow: auto;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    justify-content: space-between;
+
+    &-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        margin-bottom: 30px;
+    }
+
+    &-icon {
+        width: 201px;
+        height: 201px;
+    }
+
+    &-title {
+        margin-bottom: 15px;
+    }
+
+    &-content {
+        width: 100%;
+    }
+}

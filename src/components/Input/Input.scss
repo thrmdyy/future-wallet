@@ -1,0 +1,42 @@
+.input {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 25px;
+
+    height: 55px;
+
+    padding: 0px 10px;
+
+    display: flex;
+    align-items: center;
+
+    &-left {
+        display: flex;
+        
+        max-width: 32px;
+        margin-right: 20px;
+    }
+
+    &-input {
+        width: calc(100%);
+
+        font-family: 'Poppins';
+
+        outline: none;
+        border: none;
+
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 22px;
+        
+        color: #191C32;
+
+        &::placeholder {
+            color: #9395A4;
+        }
+
+        &_withLeftContent {
+            width: calc(100% - 52px);
+        }
+    }
+}
