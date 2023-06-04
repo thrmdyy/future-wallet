@@ -1,1 +1,1 @@
-# Future Wallet --- Venom Hakathon submission
+# Future Wallet - Venom Hakathon submission
