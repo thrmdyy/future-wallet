@@ -15,6 +15,14 @@
         margin-bottom: 10px;
     }
 
+    &-error {
+        padding-left: 10px;
+
+        color: #F11919;
+
+        margin-bottom: 10px;
+    }
+
     &-details {
         padding: 20px;
         border-radius: 25px;
@@ -43,6 +51,8 @@
             }
 
             &-value {
+                text-align: right;
+                
                 font-style: normal;
                 font-weight: 500;
                 font-size: 16px;
@@ -54,6 +64,9 @@
     }
 
     &-actions {
+        margin-top: 40px;
+        margin-bottom: 20px;
+
         width: 100%;
 
         & .button {

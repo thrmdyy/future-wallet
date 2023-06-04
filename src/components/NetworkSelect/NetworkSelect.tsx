@@ -8,7 +8,7 @@ const CnNetworkSelect = cn('networkSelect');
 export const NetworkSelect: FC = memo(() => {
     return (
         <div className={CnNetworkSelect()}>
-            <div className={CnNetworkSelect('item')}>Testnet</div>
+            <div className={CnNetworkSelect('item')}>Devnet</div>
         </div>
     );
 });

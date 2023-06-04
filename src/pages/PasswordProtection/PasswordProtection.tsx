@@ -48,26 +48,18 @@ export const PasswordProtection: FC = () => {
 
     const createWalletClickCallback = useCallback(async () => {
         if (isError) return;
-        if (!walletProvider.getAccountFromSeedPhrase) return;
+        if (!walletProvider.getAccountsFromSeedPhrase) return;
         if (!seedPhraseArr) return;
 
         try {
             const seedPhrase = seedPhraseArr?.join(' ');
 
-            const { address, publicKey, privateKey, tvc } =
-                await walletProvider.getAccountFromSeedPhrase(seedPhrase);
-
-            dispatch(
-                accountActions.addAccount({
-                    name: 'Account 1',
-                    address,
-                    privateKey,
-                    publicKey,
-                    password,
-                    seed: seedPhrase,
-                    tvc,
-                }),
+            const accounts = await walletProvider.getAccountsFromSeedPhrase(
+                seedPhrase,
+                password,
             );
+
+            dispatch(accountActions.addAccounts(accounts));
 
             dispatch(
                 routerActions.navigate({

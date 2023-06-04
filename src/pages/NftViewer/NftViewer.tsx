@@ -1,15 +1,41 @@
 import { cn } from '@bem-react/classname';
-import { FC, memo } from 'react';
+import { FC, memo, useCallback } from 'react';
 import { BaseLayout } from 'layout';
 import { Button, Input, InputToken, Title } from 'components';
+import { useAppDispatch } from 'hooks';
+import { routerActions } from 'store';
+import { routes } from 'consts';
 
 import './NftViewer.scss';
 
 const CnNftViewer = cn('nftViewer');
 
 export const NftViewer: FC = memo(() => {
+    const dispatch = useAppDispatch();
+
+    const backClickCallback = useCallback(() => {
+        dispatch(
+            routerActions.navigate({
+                path: routes.home,
+            }),
+        );
+    }, [dispatch]);
+
+    const sendClickCallback = useCallback(() => {
+        dispatch(
+            routerActions.navigate({
+                path: routes.account.sendNft,
+            }),
+        );
+    }, [dispatch]);
+
     return (
-        <BaseLayout showBack={true} showUser={false} className={CnNftViewer()}>
+        <BaseLayout
+            backClickHandler={backClickCallback}
+            showBack={true}
+            showUser={false}
+            className={CnNftViewer()}
+        >
             <div
                 className={CnNftViewer('img')}
                 style={{
@@ -18,7 +44,7 @@ export const NftViewer: FC = memo(() => {
                 }}
             ></div>
             <div className={CnNftViewer('info')}>
-                <Title content="Venom Wallet" size="m" center={false} />
+                <Title content="Venom Network" size="m" center={false} />
                 <div className={CnNftViewer('infoContent')}>
                     <div className={CnNftViewer('infoContentItem')}>
                         <div className={CnNftViewer('infoContentItem-title')}>
@@ -45,7 +71,7 @@ export const NftViewer: FC = memo(() => {
                         </div>
                     </div>
                 </div>
-                <Button>Send</Button>
+                <Button onClick={sendClickCallback}>Send</Button>
             </div>
         </BaseLayout>
     );

@@ -1,7 +1,9 @@
 import { routes } from 'consts';
 import { useAppSelector } from 'hooks';
 import {
+    AccountSelect,
     CheckMnemonic,
+    ConfirmDomainTransaction,
     ConfirmTransaction,
     Domain,
     EnterMnemonic,
@@ -15,41 +17,7 @@ import {
     Welcome,
 } from 'pages';
 import { FC, memo, useMemo } from 'react';
-import {
-    createBrowserRouter,
-    createRoutesFromElements,
-    Route,
-    RouterProvider,
-} from 'react-router-dom';
-import { CreateAccountSteps, accountsSelectors, routerSelectors } from 'store';
-
-const router = createBrowserRouter(
-    createRoutesFromElements(
-        <>
-            <Route path="/" element={<Home />} />
-            <Route
-                path={`create/${CreateAccountSteps.WELCOME}`}
-                element={<Welcome />}
-            />
-            <Route
-                path={`create/${CreateAccountSteps.NEW_SEED}`}
-                element={<Mnemonic />}
-            />
-            <Route
-                path={`create/${CreateAccountSteps.CHECK_NEW_SEED}`}
-                element={<CheckMnemonic />}
-            />
-            <Route
-                path={`create/${CreateAccountSteps.ADD_PASSWORD}`}
-                element={<PasswordProtection />}
-            />
-            <Route
-                path={`create/${CreateAccountSteps.ENTER_SEED}`}
-                element={<EnterMnemonic />}
-            />
-        </>,
-    ),
-);
+import { accountsSelectors, routerSelectors } from 'store';
 
 export const Router: FC = memo(() => {
     const path = useAppSelector(routerSelectors.path);
@@ -73,6 +41,8 @@ export const Router: FC = memo(() => {
             case routes.transaction.status:
                 return <TransactionStatus />;
 
+            case routes.account.accountSelect:
+                return <AccountSelect />;
             case routes.account.sendFunds:
                 return <SendFunds />;
             case routes.account.sendNft:
@@ -81,6 +51,8 @@ export const Router: FC = memo(() => {
                 return <NftViewer />;
             case routes.account.domainsSearch:
                 return <Domain />;
+            case routes.account.confirmDomainTransaction:
+                return <ConfirmDomainTransaction />;
             case routes.account.transactionConfirm:
                 return <ConfirmTransaction />;
             default:

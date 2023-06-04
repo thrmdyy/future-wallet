@@ -16,6 +16,8 @@ import { ReactComponent as Success } from './icons/success.svg';
 import { ReactComponent as AngleDown } from './icons/angle-down.svg';
 import { ReactComponent as Search } from './icons/search.svg';
 import { ReactComponent as Loader } from './icons/loader.svg';
+import { ReactComponent as Account } from './icons/account.svg';
+import { ReactComponent as AccountStatus } from './icons/status.svg';
 
 export const Icons = {
     Robot,
@@ -33,4 +35,6 @@ export const Icons = {
     AngleDown,
     Search,
     Loader,
+    Account,
+    AccountStatus,
 };

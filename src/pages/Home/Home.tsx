@@ -11,7 +11,7 @@ import {
     AccountNfts,
     Switch,
 } from 'components';
-import { accountsSelectors, balanceSelectors } from 'store';
+import { accountsSelectors, balanceSelectors, routerActions } from 'store';
 
 import './Home.scss';
 import React from 'react';
@@ -69,8 +69,22 @@ export const Home: FC = memo(() => {
         [selectedTabChangeCallback],
     );
 
+    const dispatch = useAppDispatch();
+
+    const userClickCallback = useCallback(() => {
+        dispatch(
+            routerActions.navigate({
+                path: routes.account.accountSelect,
+            }),
+        );
+    }, [dispatch]);
+
     return (
-        <BaseLayout showBack={false} className={CnHome()}>
+        <BaseLayout
+            userClickHandler={userClickCallback}
+            showBack={false}
+            className={CnHome()}
+        >
             <AccountCard
                 name={account?.name}
                 address={account?.address}

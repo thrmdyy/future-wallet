@@ -65,11 +65,30 @@ export const Domain: FC = memo(() => {
 
 const CnDomainItem = cn('domainItem');
 
-const DomainItem: FC<IDomain> = memo(({ fullName, price }) => {
+const DomainItem: FC<IDomain> = memo((domain) => {
+    const dispatch = useAppDispatch();
+    const { fullName, price } = domain;
+
+    const actionClickCallback = useCallback(() => {
+        dispatch(
+            routerActions.navigate({
+                path: routes.account.confirmDomainTransaction,
+                state: {
+                    domain,
+                },
+            }),
+        );
+    }, [domain, dispatch]);
+
     return (
         <div className={CnDomainItem()}>
             <div className={CnDomainItem('title')}>{fullName}</div>
-            <div className={CnDomainItem('action')}>{price} VENOM</div>
+            <div
+                onClick={actionClickCallback}
+                className={CnDomainItem('action')}
+            >
+                {price} VENOM
+            </div>
         </div>
     );
 });

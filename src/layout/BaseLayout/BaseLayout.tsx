@@ -13,6 +13,7 @@ interface IBaseLayoutProps {
     showUser?: boolean;
     showBack?: boolean;
     backClickHandler?: () => void;
+    userClickHandler?: () => void;
     showNetworkSelect?: boolean;
 }
 
@@ -24,6 +25,7 @@ export const BaseLayout: FC<IBaseLayoutProps> = memo(
         showNetworkSelect = true,
         showUser = true,
         backClickHandler,
+        userClickHandler,
     }) => {
         return (
             <div className={CnBaseLayout({}, className)}>
@@ -37,7 +39,7 @@ export const BaseLayout: FC<IBaseLayoutProps> = memo(
                     )}
                     {showNetworkSelect ? <NetworkSelect /> : <div></div>}
                     {showUser ? (
-                        <Button view="icon">
+                        <Button onClick={userClickHandler} view="icon">
                             <Icons.User />
                         </Button>
                     ) : (

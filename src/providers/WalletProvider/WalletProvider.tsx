@@ -21,7 +21,12 @@ import {
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { accountsSelectors } from 'store';
 import { nftContract } from 'consts/contracts';
-import { TransactionStatus } from 'types';
+import { AccountType, Domain, TransactionStatus } from 'types';
+import {
+    fetchDomainsCreateRequest,
+    fetchDomainsUpdateRequest,
+} from 'api/domains';
+import { getPathFromIndex } from 'utils/getPathFromIndex';
 
 interface IWalletProviderProps {
     children: React.ReactNode;
@@ -114,13 +119,17 @@ export const WalletProvider: FC<IWalletProviderProps> = ({ children }) => {
         [getAccountFromAddress, updateBalance],
     );
 
-    const getKeyPairFromSeedPhrase = useCallback(async (phrase: string) => {
-        return await tonClient.crypto.mnemonic_derive_sign_keys({
-            phrase,
-            dictionary: MnemonicDictionary.English,
-            word_count: SEED_PHRASE_WORDS_COUNT,
-        });
-    }, []);
+    const getKeyPairFromSeedPhrase = useCallback(
+        async (phrase: string, index?: number) => {
+            return await tonClient.crypto.mnemonic_derive_sign_keys({
+                phrase,
+                dictionary: MnemonicDictionary.English,
+                word_count: SEED_PHRASE_WORDS_COUNT,
+                path: getPathFromIndex(index ?? 0),
+            });
+        },
+        [],
+    );
 
     const getRandomSeedPhrase = useCallback(async () => {
         return await tonClient.crypto
@@ -136,13 +145,21 @@ export const WalletProvider: FC<IWalletProviderProps> = ({ children }) => {
     }, []);
 
     const getAccountFromSeedPhrase = useCallback(
-        async (seedPhrase: string) => {
-            const keyPair = await getKeyPairFromSeedPhrase(seedPhrase);
+        async (
+            seedPhrase: string,
+            password: string,
+            index?: number,
+        ): Promise<any> => {
+            const keyPair = await getKeyPairFromSeedPhrase(seedPhrase, index);
 
             const { tvc, boc } = await getContractData(keyPair.public);
 
             const address =
                 `0:` + (await tonClient.boc.get_boc_hash({ boc: tvc })).hash;
+
+            const account = getAccountFromAddress(address);
+
+            const { acc_type: accType } = await account.getAccount();
 
             return {
                 address,
@@ -150,9 +167,46 @@ export const WalletProvider: FC<IWalletProviderProps> = ({ children }) => {
                 privateKey: keyPair.secret,
                 tvc,
                 boc,
+                accType,
+                name: `Account ${index ? index + 1 : 1}`,
+                seed: seedPhrase,
+                password,
             };
         },
-        [getKeyPairFromSeedPhrase, getContractData],
+        [getKeyPairFromSeedPhrase, getContractData, getAccountFromAddress],
+    );
+
+    const getAccountsFromSeedPhrase = useCallback(
+        async (seedPhrase: string, password: string) => {
+            let index = 1;
+
+            const firstAccount = await getAccountFromSeedPhrase(
+                seedPhrase,
+                password,
+                0,
+            );
+
+            const accounts = [firstAccount];
+
+            while (true) {
+                const account = await getAccountFromSeedPhrase(
+                    seedPhrase,
+                    password,
+                    index,
+                );
+
+                if (account.accType === AccountType.nonExist) {
+                    break;
+                } else {
+                    accounts.push(account);
+                }
+
+                index += 1;
+            }
+
+            return accounts;
+        },
+        [getAccountFromSeedPhrase],
     );
 
     const sendFunds = useCallback(
@@ -237,6 +291,51 @@ export const WalletProvider: FC<IWalletProviderProps> = ({ children }) => {
         [selectedAccount, dispatch, account, updateBalance],
     );
 
+    const buyDomain = useCallback(
+        async (domain: Domain) => {
+            try {
+                dispatch(
+                    transactionStatusActions.setTransactionStatus(
+                        TransactionStatus.PENDING,
+                    ),
+                );
+
+                if (domain.id) {
+                    await fetchDomainsUpdateRequest({
+                        id: domain.id,
+                        owner: selectedAccount?.address as string,
+                    });
+                } else {
+                    await fetchDomainsCreateRequest({
+                        name: domain.name,
+                        owner: selectedAccount?.address as string,
+                        parentId: domain.parentId,
+                        subPrice: 1,
+                    });
+                }
+            } catch {
+            } finally {
+                dispatch(
+                    transactionStatusActions.setTransactionStatus(
+                        TransactionStatus.SUCCESS,
+                    ),
+                );
+            }
+        },
+        [dispatch, selectedAccount],
+    );
+
+    // useEffect(() => {
+    //     (async () => {
+    //         const response = await getAccountsFromSeedPhrase(
+    //             'eager meat lounge best abuse absent extra pink venue narrow vital van',
+    //             // 'vault neglect dizzy already brass reward want elegant amused bachelor fever scare',
+    //         );
+
+    //         console.log(response);
+    //     })();
+    // }, []);
+
     // useEffect(() => {
     //     (async () => {
     //         const response = await tonClient.processing.process_message({
@@ -271,7 +370,9 @@ export const WalletProvider: FC<IWalletProviderProps> = ({ children }) => {
                 account,
                 getRandomSeedPhrase,
                 getAccountFromSeedPhrase,
+                getAccountsFromSeedPhrase,
                 sendFunds,
+                buyDomain,
             }}
         >
             {children}

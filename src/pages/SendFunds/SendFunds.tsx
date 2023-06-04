@@ -1,13 +1,20 @@
 import { cn } from '@bem-react/classname';
-import { FC, memo, useCallback, useMemo, useState } from 'react';
+import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { BaseLayout } from 'layout';
 import { Button, Input, InputToken, Title } from 'components';
-import { useAppDispatch, useAppSelector, useWalletProvider } from 'hooks';
+import {
+    useAppDispatch,
+    useAppSelector,
+    useDeferredValue,
+    useWalletProvider,
+} from 'hooks';
 import { balanceSelectors, routerActions } from 'store';
 import { routes } from 'consts';
 
 import './SendFunds.scss';
-import { fromDecimals, toDecimals } from 'utils';
+import { fromDecimals, getFormattedAddress, toDecimals } from 'utils';
+import { fetchDomainsByFullNameRequest } from 'api/domains';
+import { Domain } from 'types';
 
 const CnSendFunds = cn('sendFunds');
 
@@ -27,15 +34,42 @@ export const SendFunds: FC = memo(() => {
         setSelectedToken(token);
     }, []);
 
-    const [receiver, setReceiver] = useState(
-        '0:b716e5386a27df35ce19c932f1e0dc58590d4da57a20e59cc6f89e5aa1cdf8a1',
-    );
+    const [receiver, setReceiver] = useState('');
+
+    const [receiverDomain, setReceiverDomain] = useState<null | Domain>(null);
+    const [isReceiverDomainError, setIsReceiverDomainError] =
+        useState<boolean>(false);
+
+    const deferredReceiver = useDeferredValue(receiver, 1000);
+
+    useEffect(() => {
+        if (deferredReceiver && !deferredReceiver.includes('0:')) {
+            try {
+                fetchDomainsByFullNameRequest(deferredReceiver)
+                    .then((domain) => setReceiverDomain(domain))
+                    .catch((err) => {
+                        setReceiverDomain(null);
+                        setIsReceiverDomainError(true);
+                    });
+            } catch (err: any) {
+                console.log(err);
+            }
+        }
+    }, [deferredReceiver]);
 
     const receiverChangeCallback = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
+            if (isReceiverDomainError) {
+                setIsReceiverDomainError(false);
+            }
+
+            if (receiverDomain) {
+                setReceiverDomain(null);
+            }
+
             setReceiver(e.target.value);
         },
-        [],
+        [isReceiverDomainError, receiverDomain],
     );
 
     const [amount, setAmount] = useState('1');
@@ -64,7 +98,11 @@ export const SendFunds: FC = memo(() => {
                 selectedToken.decimals,
             ).toString();
 
-            sendFunds(receiver, bnAmount);
+            if (receiver.includes('0:')) {
+                sendFunds(receiver, bnAmount);
+            } else if (receiverDomain?.owner) {
+                sendFunds(receiverDomain.owner, bnAmount);
+            }
 
             dispatch(
                 routerActions.navigate({
@@ -72,7 +110,7 @@ export const SendFunds: FC = memo(() => {
                 }),
             );
         }
-    }, [receiver, amount, sendFunds, selectedToken, dispatch]);
+    }, [receiver, amount, sendFunds, selectedToken, dispatch, receiverDomain]);
 
     const detailsContent = useMemo(() => {
         if (!receiver || !currBalance || !amount) return null;
@@ -96,6 +134,16 @@ export const SendFunds: FC = memo(() => {
                         {amount} VENOM
                     </div>
                 </div>
+                {receiverDomain && (
+                    <div className={CnSendFunds('detailsItem')}>
+                        <div className={CnSendFunds('detailsItem-title')}>
+                            Receiver by domain
+                        </div>
+                        <div className={CnSendFunds('detailsItem-value')}>
+                            {getFormattedAddress(receiverDomain.owner)}
+                        </div>
+                    </div>
+                )}
                 {/* <div className={CnSendFunds('detailsItem')}>
                     <div className={CnSendFunds('detailsItem-title')}>
                         Blockchain fee
@@ -106,7 +154,7 @@ export const SendFunds: FC = memo(() => {
                 </div> */}
             </div>
         );
-    }, [currBalance, amount, receiver]);
+    }, [currBalance, amount, receiver, receiverDomain]);
 
     return (
         <BaseLayout showBack={false} showUser={false} className={CnSendFunds()}>
@@ -116,8 +164,11 @@ export const SendFunds: FC = memo(() => {
                 <Input
                     value={receiver}
                     onChange={receiverChangeCallback}
-                    placeholder="Address"
+                    placeholder="Address or domain"
                 />
+                {isReceiverDomainError && (
+                    <div className={CnSendFunds('error')}>Domain not found</div>
+                )}
 
                 <InputToken
                     changeTokenHandler={selectedTokenChangeCallback}

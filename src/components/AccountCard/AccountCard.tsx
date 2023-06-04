@@ -6,7 +6,13 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import './AccountCard.scss';
 import { useAppDispatch, useAppSelector } from 'hooks';
-import { domainsActions, domainsSelectors, routerActions } from 'store';
+import {
+    accountActions,
+    accountsSelectors,
+    domainsActions,
+    domainsSelectors,
+    routerActions,
+} from 'store';
 import { routes } from 'consts';
 
 const CnAccountCard = cn('accountCard');
@@ -28,7 +34,7 @@ export const AccountCard: FC<IAccountCardProps> = ({
     decimals,
 }) => {
     const dispatch = useAppDispatch();
-    const ownedDomains = useAppSelector(domainsSelectors.owned);
+    const ownedDomains = useAppSelector(accountsSelectors.currAccountDomains);
 
     const currDomain = useMemo(
         () => (ownedDomains ? ownedDomains[0] : null),
@@ -38,12 +44,15 @@ export const AccountCard: FC<IAccountCardProps> = ({
     const nameContent = useMemo(() => {
         if (!currDomain) return name;
 
+        // return currDomain.level === 1
+        //     ? `.${currDomain.fullName}`
+        //     : currDomain.fullName;
         return currDomain.fullName;
     }, [currDomain, name]);
 
     useEffect(() => {
         if (address && !currDomain) {
-            dispatch(domainsActions.fetchDomainsByOwner(address));
+            dispatch(accountActions.fetchDomainsByAccountAddress(address));
         }
     }, [address, currDomain, dispatch]);
 
@@ -61,7 +70,7 @@ export const AccountCard: FC<IAccountCardProps> = ({
     );
 
     const formattedBalance = useMemo(() => {
-        if (!balance || !decimals) return null;
+        if (!balance || !decimals) return '0.00';
 
         return getFormattedBalance(fromDecimals(balance, decimals));
     }, [balance, decimals]);

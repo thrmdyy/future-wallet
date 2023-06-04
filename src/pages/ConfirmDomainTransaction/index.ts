@@ -1,0 +1,1 @@
+export { ConfirmDomainTransaction } from './ConfirmDomainTransaction';

@@ -17,7 +17,9 @@ export const routes = {
         sendNft: '/account/send/nft',
         nftViewer: '/account/nft/viewer',
         domainsSearch: '/account/domains/search',
+        confirmDomainTransaction: '/account/domains/confirm',
         domainsPrimary: '/account/domains/primary',
         transactionConfirm: '/account/transaction/confirm',
+        accountSelect: '/account/select',
     },
 };
