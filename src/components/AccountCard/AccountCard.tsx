@@ -77,9 +77,9 @@ export const AccountCard: FC<IAccountCardProps> = ({
 
     return (
         <div className={CnAccountCard()}>
-            <div className={CnAccountCard('settings')}>
+            {/* <div className={CnAccountCard('settings')}>
                 <Icons.Gear />
-            </div>
+            </div> */}
             <div className={CnAccountCard('coin')}>
                 <Icons.Venom />
             </div>

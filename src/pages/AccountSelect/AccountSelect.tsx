@@ -1,9 +1,9 @@
-import { FC, memo, useCallback, useMemo } from 'react';
+import { FC, memo, useCallback, useMemo, useState } from 'react';
 import { cn } from '@bem-react/classname';
 import { BaseLayout } from 'layout';
 import { Button, Title } from 'components';
 import { Icons } from 'assets';
-import { useAppDispatch, useAppSelector } from 'hooks';
+import { useAppDispatch, useAppSelector, useWalletProvider } from 'hooks';
 import {
     Account,
     accountActions,
@@ -22,6 +22,9 @@ export const AccountSelect: FC = memo(() => {
     const accounts = useAppSelector(accountsSelectors.accounts);
     const domains = useAppSelector(accountsSelectors.domains);
     const selectedAccount = useAppSelector(accountsSelectors.selectedAccount);
+    const walletProvider = useWalletProvider();
+
+    const [loading, setLoading] = useState(false);
 
     const backClickCallback = useCallback(() => {
         dispatch(
@@ -40,6 +43,26 @@ export const AccountSelect: FC = memo(() => {
         );
     }, [dispatch]);
 
+    const addAccountClickCallback = useCallback(async () => {
+        if (
+            walletProvider.getAccountFromSeedPhrase &&
+            selectedAccount &&
+            accounts
+        ) {
+            setLoading(true);
+
+            const newAccount = await walletProvider.getAccountFromSeedPhrase(
+                selectedAccount?.seed,
+                selectedAccount.password,
+                accounts.length,
+            );
+
+            dispatch(accountActions.addAccount(newAccount));
+
+            setLoading(false);
+        }
+    }, [dispatch, walletProvider, selectedAccount, accounts]);
+
     const accountClickCallback = useCallback(
         (account: Account) => {
             return () => dispatch(accountActions.setSelectedAccount(account));
@@ -49,7 +72,9 @@ export const AccountSelect: FC = memo(() => {
 
     const accountsContent = useMemo(() => {
         return accounts?.map((account) => {
-            const [domain] = domains[account.address];
+            const [domain] = domains[account.address]
+                ? domains[account.address]
+                : [null];
             const isSelected = selectedAccount?.address === account.address;
 
             return (
@@ -94,6 +119,13 @@ export const AccountSelect: FC = memo(() => {
                 </div>
             </div>
             <div className={CnAccountSelect('actions')}>
+                <Button
+                    disabled={loading}
+                    onClick={addAccountClickCallback}
+                    view="light"
+                >
+                    Add account
+                </Button>
                 <Button onClick={logoutClickCallback} view="dark">
                     Logout
                 </Button>
