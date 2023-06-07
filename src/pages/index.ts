@@ -12,3 +12,4 @@ export { ConfirmTransaction } from './ConfirmTransaction';
 export { TransactionStatus } from './TransactionStatus';
 export { ConfirmDomainTransaction } from './ConfirmDomainTransaction';
 export { AccountSelect } from './AccountSelect';
+export { Chat } from './Chat';

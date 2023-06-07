@@ -41,7 +41,7 @@ export const Domain: FC = memo(() => {
 
     const domainsContent = useMemo(() => {
         return domains.map((domain) => (
-            <DomainItem key={domain.id} {...domain} />
+            <DomainItem key={domain.fullName} {...domain} />
         ));
     }, [domains]);
 

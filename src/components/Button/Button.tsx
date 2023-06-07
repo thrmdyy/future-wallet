@@ -11,7 +11,7 @@ interface IButtonProps
         HTMLButtonElement
     > {
     size?: 's' | 'm' | 'l';
-    view?: 'light' | 'dark' | 'icon';
+    view?: 'light' | 'dark' | 'icon' | 'dark-icon';
 }
 
 export const Button: FC<IButtonProps> = memo(

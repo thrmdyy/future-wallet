@@ -2,6 +2,7 @@ import { routes } from 'consts';
 import { useAppSelector } from 'hooks';
 import {
     AccountSelect,
+    Chat,
     CheckMnemonic,
     ConfirmDomainTransaction,
     ConfirmTransaction,
@@ -25,6 +26,8 @@ export const Router: FC = memo(() => {
 
     const router = useMemo(() => {
         switch (path) {
+            case routes.futy:
+                return <Chat />;
             case routes.home:
                 return selectedAccount ? <Home /> : <Welcome />;
             case routes.createAccount['add-password']:

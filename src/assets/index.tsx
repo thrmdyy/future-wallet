@@ -18,6 +18,7 @@ import { ReactComponent as Search } from './icons/search.svg';
 import { ReactComponent as Loader } from './icons/loader.svg';
 import { ReactComponent as Account } from './icons/account.svg';
 import { ReactComponent as AccountStatus } from './icons/status.svg';
+import { ReactComponent as Namer } from './icons/namer.svg';
 
 export const Icons = {
     Robot,
@@ -37,4 +38,5 @@ export const Icons = {
     Loader,
     Account,
     AccountStatus,
+    Namer,
 };

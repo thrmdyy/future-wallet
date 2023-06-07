@@ -16,6 +16,7 @@
         cursor: pointer;
         
         width: 100%;
+
         display: flex;
         justify-content: center;
         align-items: center;
@@ -34,6 +35,10 @@
         text-align: center;
 
         color: #6069AC;
+
+        & svg {
+            margin-right: 8px;
+        }
     }
 
     &-settings {

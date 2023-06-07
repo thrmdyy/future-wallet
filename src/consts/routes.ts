@@ -2,6 +2,7 @@ import { CreateAccountSteps } from 'store';
 
 export const routes = {
     home: '/',
+    futy: '/futy',
     createAccount: {
         [CreateAccountSteps.WELCOME]: `/create/${CreateAccountSteps.WELCOME}`,
         [CreateAccountSteps.ADD_PASSWORD]: `/create/${CreateAccountSteps.ADD_PASSWORD}`,

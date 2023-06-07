@@ -9,7 +9,7 @@ const CnConfirmTransaction = cn('confirmTransaction');
 
 export const ConfirmTransaction: FC = memo(() => {
     return (
-        <BaseLayout className={CnConfirmTransaction()}>
+        <BaseLayout showBack={false} className={CnConfirmTransaction()}>
             <div>
                 <Title content="Transaction" center={false} />
 

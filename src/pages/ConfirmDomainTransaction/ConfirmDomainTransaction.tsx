@@ -52,7 +52,7 @@ export const ConfirmDomainTransaction: FC = memo(() => {
     }, [dispatch]);
 
     return (
-        <BaseLayout className={CnConfirmDomainTransaction()}>
+        <BaseLayout showBack={false} className={CnConfirmDomainTransaction()}>
             <div>
                 <Title content="Transaction" center={false} />
 

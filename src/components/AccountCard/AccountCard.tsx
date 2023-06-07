@@ -103,7 +103,7 @@ export const AccountCard: FC<IAccountCardProps> = ({
                     onClick={searchDomainsClickCallback}
                     className={CnAccountCard('domain')}
                 >
-                    Own your first domain
+                    <Icons.Namer /> Take your name
                 </div>
             ) : null}
 

@@ -9,13 +9,17 @@ import {
     AccountAssets,
     AccountCard,
     AccountNfts,
+    Button,
+    NetworkSelect,
     Switch,
 } from 'components';
 import { accountsSelectors, balanceSelectors, routerActions } from 'store';
 
 import './Home.scss';
 import React from 'react';
+import { Icons } from 'assets';
 
+const CnBaseLayout = cn('baseLayout');
 const CnHome = cn('home');
 
 export const Home: FC = memo(() => {
@@ -79,24 +83,39 @@ export const Home: FC = memo(() => {
         );
     }, [dispatch]);
 
+    const futyClickCallback = useCallback(() => {
+        dispatch(
+            routerActions.navigate({
+                path: routes.futy,
+            }),
+        );
+    }, [dispatch]);
+
     return (
-        <BaseLayout
-            userClickHandler={userClickCallback}
-            showBack={false}
-            className={CnHome()}
-        >
-            <AccountCard
-                name={account?.name}
-                address={account?.address}
-                balance={balance?.balance}
-                balanceSymbol={balance?.symbol}
-                decimals={balance?.decimals}
-            />
+        <div className={CnBaseLayout({}, CnHome())}>
+            <div className={CnBaseLayout('header')}>
+                <Button onClick={futyClickCallback} view="icon">
+                    <Icons.Robot className={CnHome('futy')} />
+                </Button>
+                <NetworkSelect />
+                <Button onClick={userClickCallback} view="icon">
+                    <Icons.User />
+                </Button>
+            </div>
+            <div className={CnBaseLayout('content')}>
+                <AccountCard
+                    name={account?.name}
+                    address={account?.address}
+                    balance={balance?.balance}
+                    balanceSymbol={balance?.symbol}
+                    decimals={balance?.decimals}
+                />
 
-            <AccountActions />
+                <AccountActions />
 
-            {switchContent}
-            {tabContent}
-        </BaseLayout>
+                {switchContent}
+                {tabContent}
+            </div>
+        </div>
     );
 });
