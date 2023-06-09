@@ -1,6 +1,7 @@
 export interface Domain {
     id: string;
     name: string;
+    address: string;
     parentId: string;
     price: number;
     fullName: string;

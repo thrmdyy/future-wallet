@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_KEY = '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';
+const API_KEY = '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';
 const API_URL = 'https://api.openai.com/v1/completions';
 
 export const sendMessageToFuty = async (messages: any) => {
@@ -9,7 +9,7 @@ export const sendMessageToFuty = async (messages: any) => {
             API_URL,
             {
                 prompt: messages,
-                model: 'davinci:ft-personal-2023-06-06-20-42-09',
+                model: 'davinci:ft-personal-2023-06-08-18-44-03',
                 max_tokens: 512,
             },
             {

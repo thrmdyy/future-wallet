@@ -4,10 +4,11 @@ import { BaseLayout } from 'layout';
 import { FC, memo, useCallback, useMemo } from 'react';
 import { useAppDispatch, useAppSelector, useWalletProvider } from 'hooks';
 import { balanceSelectors, routerActions } from 'store';
-import { fromDecimals } from 'utils';
+import { fromDecimals, toDecimals } from 'utils';
 
 import './ConfirmDomainTransaction.scss';
 import { routes } from 'consts';
+import { useGetParentDomain } from 'hooks/useParentDomain';
 
 const CnConfirmDomainTransaction = cn('confirmDomainTransaction');
 
@@ -31,9 +32,11 @@ export const ConfirmDomainTransaction: FC = memo(() => {
 
     const domain = useMemo(() => state.domain, [state]);
 
+    const parentDomain = useGetParentDomain(domain.parentId);
+
     const confirmClickCallback = useCallback(() => {
         if (buyDomain) {
-            buyDomain(domain);
+            buyDomain(domain, parentDomain);
 
             dispatch(
                 routerActions.navigate({
@@ -41,7 +44,7 @@ export const ConfirmDomainTransaction: FC = memo(() => {
                 }),
             );
         }
-    }, [dispatch, domain, buyDomain]);
+    }, [dispatch, domain, buyDomain, parentDomain]);
 
     const backClickCallback = useCallback(() => {
         dispatch(
@@ -50,6 +53,127 @@ export const ConfirmDomainTransaction: FC = memo(() => {
             }),
         );
     }, [dispatch]);
+
+    const contractDataContent = useMemo(() => {
+        if (!parentDomain) return null;
+
+        return (
+            <div className={CnConfirmDomainTransaction('details')}>
+                <div className={CnConfirmDomainTransaction('details-title')}>
+                    Data
+                </div>
+                <div className={CnConfirmDomainTransaction('details-content')}>
+                    <div
+                        className={CnConfirmDomainTransaction(
+                            'transactionData',
+                        )}
+                    >
+                        <div
+                            className={CnConfirmDomainTransaction(
+                                'transactionData-title',
+                            )}
+                        >
+                            Method:
+                        </div>
+                        <div
+                            className={CnConfirmDomainTransaction(
+                                'transactionData-value',
+                            )}
+                        >
+                            mintNft
+                        </div>
+                    </div>
+                    <div
+                        className={CnConfirmDomainTransaction(
+                            'transactionData',
+                        )}
+                    >
+                        <div
+                            className={CnConfirmDomainTransaction(
+                                'transactionData-title',
+                            )}
+                        >
+                            root
+                        </div>
+                        <div
+                            className={CnConfirmDomainTransaction(
+                                'transactionData-value',
+                            )}
+                        >
+                            {parentDomain.address}
+                        </div>
+                    </div>
+                    <div
+                        className={CnConfirmDomainTransaction(
+                            'transactionData',
+                        )}
+                    >
+                        <div
+                            className={CnConfirmDomainTransaction(
+                                'transactionData-title',
+                            )}
+                        >
+                            name
+                        </div>
+                        <div
+                            className={CnConfirmDomainTransaction(
+                                'transactionData-value',
+                            )}
+                        >
+                            {domain.level === 1
+                                ? `.${domain.fullName}`
+                                : domain.fullName}
+                        </div>
+                    </div>
+                    <div
+                        className={CnConfirmDomainTransaction(
+                            'transactionData',
+                        )}
+                    >
+                        <div
+                            className={CnConfirmDomainTransaction(
+                                'transactionData-title',
+                            )}
+                        >
+                            hprice
+                        </div>
+                        <div
+                            className={CnConfirmDomainTransaction(
+                                'transactionData-value',
+                            )}
+                        >
+                            {String(fromDecimals(Number(domain.price), 9))}{' '}
+                            {' VENOM'}
+                        </div>
+                    </div>
+                    <div
+                        className={CnConfirmDomainTransaction(
+                            'transactionData',
+                        )}
+                    >
+                        <div
+                            className={CnConfirmDomainTransaction(
+                                'transactionData-title',
+                            )}
+                        >
+                            json
+                        </div>
+                        <div
+                            className={CnConfirmDomainTransaction(
+                                'transactionData-value',
+                            )}
+                        >
+                            {`{ "name": "${
+                                domain.level === 1
+                                    ? `.${domain.fullName}`
+                                    : domain.fullName
+                            }" }`}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }, [parentDomain, domain]);
 
     return (
         <BaseLayout showBack={false} className={CnConfirmDomainTransaction()}>
@@ -104,7 +228,7 @@ export const ConfirmDomainTransaction: FC = memo(() => {
                                     'detailsItem-value',
                                 )}
                             >
-                                {domain.price} VENOM
+                                {fromDecimals(domain.price, 9)} VENOM
                             </div>
                         </div>
                         <div
@@ -130,59 +254,7 @@ export const ConfirmDomainTransaction: FC = memo(() => {
                     </div>
                 </div>
 
-                <div className={CnConfirmDomainTransaction('details')}>
-                    <div
-                        className={CnConfirmDomainTransaction('details-title')}
-                    >
-                        Data
-                    </div>
-                    <div
-                        className={CnConfirmDomainTransaction(
-                            'details-content',
-                        )}
-                    >
-                        <div
-                            className={CnConfirmDomainTransaction(
-                                'transactionData',
-                            )}
-                        >
-                            <div
-                                className={CnConfirmDomainTransaction(
-                                    'transactionData-title',
-                                )}
-                            >
-                                Method:
-                            </div>
-                            <div
-                                className={CnConfirmDomainTransaction(
-                                    'transactionData-value',
-                                )}
-                            >
-                                mint
-                            </div>
-                        </div>
-                        <div
-                            className={CnConfirmDomainTransaction(
-                                'transactionData',
-                            )}
-                        >
-                            <div
-                                className={CnConfirmDomainTransaction(
-                                    'transactionData-title',
-                                )}
-                            >
-                                owner_address
-                            </div>
-                            <div
-                                className={CnConfirmDomainTransaction(
-                                    'transactionData-value',
-                                )}
-                            >
-                                0:45835b554d30a9fa2c771b6da93a1cb17f9338e6a88a890669a35fc4edf5bfb8
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {contractDataContent}
             </div>
 
             <div className={CnConfirmDomainTransaction('actions')}>

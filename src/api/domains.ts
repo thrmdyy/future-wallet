@@ -26,6 +26,20 @@ export const fetchDomainsByKeywordRequest = async (keywords: string) => {
         });
 };
 
+export const fetchDomainByIdRequest = async (id: string) => {
+    return await axios
+        .get<never, AxiosResponse<Domain>>(
+            `${domainsApiUrl}/domain/${id}?subDomains=true`,
+        )
+        .then((res) => res.data);
+};
+
+export const fetchDomainsFromContractRequest = async () => {
+    return await axios
+        .post(`${domainsApiUrl}/domain/fetch`)
+        .then((res) => res.data);
+};
+
 export const fetchDomainsByOwnerRequest = async (address: string) => {
     return await axios
         .get<never, AxiosResponse<Domain[]>>(

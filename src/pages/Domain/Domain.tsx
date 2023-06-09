@@ -9,6 +9,7 @@ import { Domain as IDomain } from 'types';
 import { routes } from 'consts';
 
 import './Domain.scss';
+import { fromDecimals } from 'utils';
 
 const CnDomain = cn('domain');
 
@@ -87,7 +88,7 @@ const DomainItem: FC<IDomain> = memo((domain) => {
                 onClick={actionClickCallback}
                 className={CnDomainItem('action')}
             >
-                {price} VENOM
+                {fromDecimals(price, 9)} VENOM
             </div>
         </div>
     );

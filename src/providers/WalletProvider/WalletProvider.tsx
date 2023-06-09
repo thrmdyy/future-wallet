@@ -20,13 +20,14 @@ import {
 } from 'store';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { accountsSelectors } from 'store';
-import { nftContract } from 'consts/contracts';
+import { nftContract, nftMinterContract } from 'consts/contracts';
 import { AccountType, Domain, TransactionStatus } from 'types';
-import {
-    fetchDomainsCreateRequest,
-    fetchDomainsUpdateRequest,
-} from 'api/domains';
 import { getPathFromIndex } from 'utils/getPathFromIndex';
+import { toDecimals } from 'utils';
+import { fetchDomainsFromContractRequest } from 'api/domains';
+
+const collectionAddress =
+    '0:01a2164e2b66a4b3eefc23f831d778fb0a7018148d1938d99c874588fd7a1965';
 
 interface IWalletProviderProps {
     children: React.ReactNode;
@@ -229,10 +230,7 @@ export const WalletProvider: FC<IWalletProviderProps> = ({ children }) => {
 
                 const response = await tonClient.abi.encode_message_body({
                     address: selectedAccount?.address,
-                    abi: {
-                        type: 'Json',
-                        value: accountAbi,
-                    },
+                    abi: abiContract(accountContract.abi),
                     call_set: {
                         function_name: 'sendTransaction',
                         input: {
@@ -265,7 +263,7 @@ export const WalletProvider: FC<IWalletProviderProps> = ({ children }) => {
 
                 const { transaction } =
                     await tonClient.processing.wait_for_transaction({
-                        abi: { type: 'Json', value: accountAbi },
+                        abi: abiContract(accountContract.abi),
                         message: deployAndTransferMsg.message,
                         shard_block_id: sendRequestResult.shard_block_id,
                         send_events: false,
@@ -292,7 +290,7 @@ export const WalletProvider: FC<IWalletProviderProps> = ({ children }) => {
     );
 
     const buyDomain = useCallback(
-        async (domain: Domain) => {
+        async (domain: Domain, parentDomain: Domain) => {
             try {
                 dispatch(
                     transactionStatusActions.setTransactionStatus(
@@ -300,20 +298,84 @@ export const WalletProvider: FC<IWalletProviderProps> = ({ children }) => {
                     ),
                 );
 
-                if (domain.id) {
-                    await fetchDomainsUpdateRequest({
-                        id: domain.id,
-                        owner: selectedAccount?.address as string,
+                const accountAbi = abiContract(accountContract.abi);
+
+                const amount = String(domain.price + toDecimals(2, 9));
+
+                const keypair = {
+                    public: selectedAccount?.publicKey,
+                    secret: selectedAccount?.privateKey,
+                } as KeyPair;
+
+                const nftMintMessage = await tonClient.abi.encode_message_body({
+                    address: collectionAddress,
+                    abi: abiContract(nftMinterContract.abi),
+                    call_set: {
+                        function_name: 'mintNft',
+                        input: {
+                            root: parentDomain.address,
+                            name: domain.name,
+                            hPrice: String(domain.price),
+                            json: JSON.stringify({
+                                name:
+                                    domain.level === 1
+                                        ? `.${domain.fullName}`
+                                        : domain.fullName,
+                            }),
+                        },
+                    },
+                    signer: {
+                        type: 'External',
+                        public_key:
+                            'e1600c99fef3c1e7242de411ff00fcd8916937b41bbdf90193cf6dd7f1fd955b',
+                    },
+                    is_internal: true,
+                });
+
+                const accountTransaction =
+                    await tonClient.abi.encode_message_body({
+                        address: selectedAccount?.address,
+                        abi: accountAbi,
+                        call_set: {
+                            function_name: 'sendTransaction',
+                            input: {
+                                dest: collectionAddress,
+                                value: amount,
+                                bounce: true,
+                                flags: 3,
+                                payload: nftMintMessage.body,
+                            },
+                        },
+                        is_internal: false,
+                        signer: {
+                            type: 'Keys',
+                            keys: keypair,
+                        },
                     });
-                } else {
-                    await fetchDomainsCreateRequest({
-                        name: domain.name,
-                        owner: selectedAccount?.address as string,
-                        parentId: domain.parentId,
-                        subPrice: 1,
+
+                const deployAndTransferMsg =
+                    await tonClient.boc.encode_external_in_message({
+                        dst: selectedAccount?.address as string,
+                        init: selectedAccount?.tvc,
+                        body: accountTransaction.body,
                     });
-                }
-            } catch {
+
+                const sendRequestResult =
+                    await tonClient.processing.send_message({
+                        message: deployAndTransferMsg.message,
+                        send_events: true,
+                    });
+
+                await tonClient.processing.wait_for_transaction({
+                    abi: accountAbi,
+                    message: deployAndTransferMsg.message,
+                    shard_block_id: sendRequestResult.shard_block_id,
+                    send_events: true,
+                });
+
+                await fetchDomainsFromContractRequest();
+            } catch (err) {
+                console.error(err);
             } finally {
                 dispatch(
                     transactionStatusActions.setTransactionStatus(
