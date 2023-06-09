@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_KEY = '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';
-const API_URL = 'https://api.openai.com/v1/completions';
+const API_KEY = process.env.REACT_APP_GPT_API_KEY as string;
+const API_URL = process.env.REACT_APP_GPT_API_URL as string;
 
 export const sendMessageToFuty = async (messages: any) => {
     try {

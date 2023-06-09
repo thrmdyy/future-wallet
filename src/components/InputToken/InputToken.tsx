@@ -42,7 +42,7 @@ export const InputToken: FC<IInputTokenProps> = memo(
             <div className={CnInputToken()}>
                 <div className={CnInputToken('base')}>
                     <div
-                        onClick={isDropdownShowChangeCallback}
+                        // onClick={isDropdownShowChangeCallback}
                         className={CnInputToken('token')}
                     >
                         <div className={CnInputToken('token-img')}>
@@ -55,14 +55,14 @@ export const InputToken: FC<IInputTokenProps> = memo(
                         <div className={CnInputToken('token-text')}>
                             <div className={CnInputToken('token-symbol')}>
                                 {selectedToken.symbol}{' '}
-                                <Icons.AngleDown
+                                {/* <Icons.AngleDown
                                     className={CnInputToken(
                                         'dropdownIndicator',
                                         {
                                             show: isDropdownShow,
                                         },
                                     )}
-                                />
+                                /> */}
                             </div>
                             <div className={CnInputToken('token-name')}>
                                 {selectedToken.name}
