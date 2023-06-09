@@ -14,16 +14,7 @@ const CnEnterMnemonic = cn('enterMnemonic');
 const WORDS_COUNT = 12;
 
 export const EnterMnemonic: FC = memo(() => {
-    const [words, setWords] = useState<Record<number, string>>(
-        'eager meat lounge best abuse absent extra pink venue narrow vital van'
-            .split(' ')
-            .reduce((acc, item, index) => {
-                return {
-                    ...acc,
-                    [index]: item,
-                };
-            }, {}),
-    );
+    const [words, setWords] = useState<Record<number, string>>({});
 
     const wordsChangeCallback = useCallback((index: number) => {
         return (e: React.ChangeEvent<HTMLInputElement>) => {
